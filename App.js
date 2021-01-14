@@ -7,13 +7,11 @@ import ListScreen from './src/components/common/ListScreen';
 const App = () => {
   return (
     <View>
-      <ListScreen />
+      <LogInForm />
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-
-});
+const styles = StyleSheet.create({});
 
 export default App;
