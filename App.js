@@ -6,6 +6,7 @@ import LogInForm from './src/screens/LogInForm';
 import Header from './src/components/common/Header';
 import Button from './src/components/common/Button';
 import Spinner from './src/components/common/Spinner';
+import ListScreen from './src/components/common/ListScreen';
 
 const App = () => {
   const [loggedIn, setLoggedIn] = useState(null);
@@ -26,25 +27,36 @@ const App = () => {
     switch (loggedIn) {
       case true:
         return (
-          <View style={{ height: 60 }}>
-            <Button onPress={() => auth().signOut()}>Log Out</Button>
+          <View>
+            <ListScreen />
           </View>
         );
       case false:
         return <LogInForm />;
       default:
-        return <Spinner size="large" />;
+        return (
+          <View style={styles.spinnerStyle}>
+            <Spinner size="large" />
+          </View>
+        );
     }
   };
 
   return (
     <View>
-      <Header headerText="Authentification" />
+      <Header headerText="Да отидем на пазар!" />
       {renderContent()}
     </View>
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  spinnerStyle: {
+    flex: 1,
+  },
+  buttonStyle: {
+    marginVertical: 50,
+  },
+});
 
 export default App;

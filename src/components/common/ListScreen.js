@@ -1,9 +1,9 @@
 import React from 'react';
+import auth from '@react-native-firebase/auth';
 import { Text, StyleSheet, FlatList, View } from 'react-native';
-import Header from '../common/Header';
 import Card from '../common/Card';
 import CardSection from '../common/CardSection';
-import Button from '../common/Button';
+import Button from './Button';
 
 const ListScreen = () => {
   const gotchas = [
@@ -20,7 +20,6 @@ const ListScreen = () => {
 
   return (
     <>
-      <Header headerText="Gocho's List:" />
       <Card>
         <CardSection>
           <FlatList
@@ -39,7 +38,7 @@ const ListScreen = () => {
           />
         </CardSection>
         <CardSection>
-          <Button>Log Out!</Button>
+          <Button onPress={() => auth().signOut()}>Log Out</Button>
         </CardSection>
       </Card>
     </>
