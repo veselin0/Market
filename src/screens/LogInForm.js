@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Alert } from 'react-native';
 import auth from '@react-native-firebase/auth';
-import Header from '../components/common/Header';
 import Card from '../components/common/Card';
 import CardSection from '../components/common/CardSection';
 import Button from '../components/common/Button';
@@ -15,29 +14,65 @@ const LogInForm = () => {
   const [loading, setLoading] = useState(false);
 
   const onButonPress = () => {
+    if (!email || !password) {
+      setError('Please fill in the form');
+      return;
+    }
+
     setError('');
-    setLoading('');
+    setLoading(true);
 
     auth()
       .signInWithEmailAndPassword(email, password)
       .then(onLoginSuccess)
-      .catch(() => {
-        auth()
-          .createUserWithEmailAndPassword(email, password)
-          .then(onLoginSuccess)
-          .catch(onLoginFail);
-      });
+      .catch((e) => {
+        if (e.code === 'auth/user-not-found') {
+          return promptToCreateNewAccount()
+            .then(onLoginSuccess)
+            .catch(onLoginFail);
+        } else {
+          onLoginFail(e);
+        }
+      })
+      .finally(() => setLoading(false));
   };
+
+  const promptToCreateNewAccount = () =>
+    new Promise((res, rej) => {
+      Alert.alert(
+        'This account does not exist',
+        'Do you want to create an account with these credentials?',
+        [
+          {
+            text: 'Cancel',
+            style: 'cancel',
+            onPress: res(),
+          },
+          {
+            text: 'OK',
+            onPress: () => {
+              console.log(
+                'Not an existing user. Attempting to create new user',
+              );
+
+              auth()
+                .createUserWithEmailAndPassword(email, password)
+                .then(res)
+                .catch(rej);
+            },
+          },
+        ],
+        { cancelable: false },
+      );
+    });
 
   const onLoginFail = (e) => {
     setError(`Authentication failed: ${e.message}`);
-    setLoading(false);
   };
 
   const onLoginSuccess = () => {
     setEmail('');
     setPassword('');
-    setLoading(false);
     setError('');
   };
 
@@ -51,12 +86,11 @@ const LogInForm = () => {
 
   return (
     <View>
-      <Header headerText="Gotcha the Great!" />
       <Card>
         <CardSection>
           <Input
             label="Email"
-            placeholder="email@email.com"
+            placeholder="user@email.com"
             onChangeText={(text) => setEmail(text)}
             value={email}
           />

@@ -17,4 +17,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export { Spinner };
+export default Spinner;
