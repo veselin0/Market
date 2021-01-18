@@ -6,6 +6,7 @@ import CardSection from '../components/common/CardSection';
 import Button from '../components/common/Button';
 import Input from '../components/common/Input';
 import Spinner from '../components/common/Spinner';
+import Header from '../components/common/Header';
 
 const LogInForm = () => {
   const [email, setEmail] = useState('');
@@ -81,11 +82,12 @@ const LogInForm = () => {
       return <Spinner size="small" />;
     }
 
-    return <Button onPress={onButonPress}>Log In!</Button>;
+    return <Button onPress={onButonPress}>Вход или Регистрация</Button>;
   };
 
   return (
     <View>
+      <Header headerText="Да отидем на пазар!" />
       <Card>
         <CardSection>
           <Input

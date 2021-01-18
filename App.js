@@ -6,7 +6,7 @@ import LogInForm from './src/screens/LogInForm';
 import Header from './src/components/common/Header';
 import Button from './src/components/common/Button';
 import Spinner from './src/components/common/Spinner';
-import ListScreen from './src/components/common/ListScreen';
+import Todos from './src/components/common/Todos';
 
 const App = () => {
   const [loggedIn, setLoggedIn] = useState(null);
@@ -23,31 +23,18 @@ const App = () => {
     return unsubscribe;
   }, []);
 
-  const renderContent = () => {
-    switch (loggedIn) {
-      case true:
-        return (
-          <View>
-            <ListScreen />
-          </View>
-        );
-      case false:
-        return <LogInForm />;
-      default:
-        return (
-          <View style={styles.spinnerStyle}>
-            <Spinner size="large" />
-          </View>
-        );
-    }
-  };
-
-  return (
-    <View>
-      <Header headerText="Да отидем на пазар!" />
-      {renderContent()}
-    </View>
-  );
+  switch (loggedIn) {
+    case true:
+      return <Todos />;
+    case false:
+      return <LogInForm />;
+    default:
+      return (
+        <View style={styles.spinnerStyle}>
+          <Spinner size="large" />
+        </View>
+      );
+  }
 };
 
 const styles = StyleSheet.create({
